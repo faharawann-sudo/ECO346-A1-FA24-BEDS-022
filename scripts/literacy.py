@@ -1,7 +1,7 @@
 
 """
 04_second_language.py -- Question 5: Recreate the age-band table and literacy chart in Python.
-Variant 2: Rural Sindh (prov_code 3, urban_rural 1).
+Variant 6: Rural Balochistan (prov_code 4, urban_rural 1).
 Run from the repository root: python scripts/04_second_language.py
 """
 
@@ -31,20 +31,19 @@ merged_df = person_df.merge(
     how="left"
 )
 
-# Select literate-status observations for rural Sindh residents aged 10-64
+# Select literacy observations for rural Balochistan residents aged 10-64
 literacy_df = merged_df[
-    (merged_df["prov_code"] == 3) &
+    (merged_df["prov_code"] == 4) &
     (merged_df["urban_rural"] == 1) &
     merged_df["age"].between(10, 64) &
     merged_df["literate"].notna()
 ].copy()
 
 # Assign five-year age groups and calculate their midpoints
-# Floor division ensures that ages are grouped into the intended intervals
 literacy_df["group_start"] = (literacy_df["age"] // 5) * 5
 literacy_df["group_midpoint"] = literacy_df["group_start"] + 2
 
-# Calculate sample sizes and weighted literacy percentages for each age group
+# Calculate sample sizes and weighted literacy percentages
 age_group_results = []
 
 for start_age, group_data in literacy_df.groupby("group_start"):
@@ -66,7 +65,7 @@ for start_age, group_data in literacy_df.groupby("group_start"):
             )
         )
 
-    # Measure the difference between men's and women's literacy rates
+    # Calculate the difference between men's and women's literacy rates
     result["gap"] = result["rate_men"] - result["rate_women"]
 
     age_group_results.append(result)
@@ -101,6 +100,7 @@ rounded_table.to_csv(
 )
 
 print(rounded_table.to_string(index=False))
+
 
 # Retrieve specific literacy rates for the Google Form
 def get_literacy_rate(age_band, column):
@@ -273,8 +273,8 @@ ax.tick_params(length=0)
 
 # Add the main heading
 fig.suptitle(
-    "In rural Sindh, men are at least 22 percentage points more literate\n"
-    "than women in every age band",
+    "Literacy rates differ between men and women\n"
+    "across age groups in rural Balochistan",
     x=0.01,
     ha="left",
     fontweight="bold",
@@ -290,7 +290,7 @@ has_small_groups = (
 # Prepare the chart's source and sample description
 figure_note = (
     "Source: PSLM 2019-20, person file merged with household file. "
-    f"Sample: persons aged 10-64 in rural Sindh with non-missing literacy "
+    f"Sample: persons aged 10-64 in rural Balochistan with non-missing literacy "
     f"(n = {len(literacy_df):,}).\n"
     "Weighted by hhweight; each marker is a five-year band plotted at its midpoint.\n"
     "Hollow markers: cells with fewer than 30 observations"
@@ -317,5 +317,6 @@ fig.subplots_adjust(
 
 # Export the final chart as an SVG file
 fig.savefig(
-    project_dir / "figures" / "literacy_by_age_python.svg"
+    project_dir / "figures" / "literacy_by_age_python.svg",
+    format="svg"
 )

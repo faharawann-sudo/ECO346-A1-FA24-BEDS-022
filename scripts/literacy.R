@@ -1,7 +1,7 @@
 
 # 03_literacy.R -- Question 3 and redesigned Question 4
 # Weighted literacy rates by five-year age groups for men and women
-# Variant 2: Rural Sindh
+# Variant 6: Rural Balochistan
 # Run from the repository root: Rscript scripts/03_literacy.R
 
 # Load the required packages
@@ -35,9 +35,9 @@ merged_data <- merge(
   all.x = TRUE
 )
 
-# Select rural Sindh residents aged 10-64 with available literacy data
+# Select rural Balochistan residents aged 10-64 with available literacy data
 literacy_data <- merged_data[
-  merged_data$prov_code == 3 &
+  merged_data$prov_code == 4 &
     merged_data$urban_rural == 1 &
     merged_data$age >= 10 &
     merged_data$age <= 64 &
@@ -142,7 +142,7 @@ print(results_table)
 get_rate <- function(age_band, column_name) {
   sprintf(
     "%.1f",
-    age_comparison[[column_name]][age_comparison$age_band == age_band]
+    age_comparison[[column_name]][age_comparison$band == age_band]
   )
 }
 
@@ -197,7 +197,7 @@ gap_label_position <-
 # Prepare the figure caption
 figure_caption <- paste0(
   "Source: PSLM 2019-20, person file merged with household file. ",
-  "Sample: persons aged 10-64 in rural Sindh with non-missing literacy (n = ",
+  "Sample: persons aged 10-64 in rural Balochistan with non-missing literacy (n = ",
   format(nrow(literacy_data), big.mark = ","), ").\n",
   "Weighted by hhweight; each marker is a five-year band plotted at its midpoint.\n",
   "Hollow markers: cells with fewer than 30 observations",
@@ -286,8 +286,8 @@ literacy_plot <- ggplot(
   ) +
   labs(
     title = paste0(
-      "In rural Sindh, men are at least 22 percentage points more literate\n",
-      "than women in every age band"
+      "Literacy rates differ between men and women\n",
+      "across age groups in rural Balochistan"
     ),
     x = "Age band (years)",
     y = "Literate (weighted %)",

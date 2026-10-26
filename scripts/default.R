@@ -1,6 +1,6 @@
 
 # 01_default.R -- Question 4: Create a basic scatterplot using default settings
-# Variant 2: Rural Sindh (prov_code 3, urban_rural 1)
+# Variant 6: Rural Balochistan (prov_code 4, urban_rural 1)
 # Execute from the repository's root directory
 
 library(ggplot2)
@@ -31,9 +31,9 @@ combined_data <- merge(
   all.x = TRUE
 )
 
-# Filter the literacy data for rural Sindh residents aged 10 to 64
+# Filter the literacy data for rural Balochistan residents aged 10 to 64
 literacy_data <- combined_data[
-  combined_data$prov_code == 3 &
+  combined_data$prov_code == 4 &
     combined_data$urban_rural == 1 &
     combined_data$age >= 10 &
     combined_data$age <= 64 &
